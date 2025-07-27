@@ -1,24 +1,26 @@
 
 import express from 'express';
-import Medicine from '../Models/Medicine.js'; // adjust the path if needed
+import Medicine from '../Models/Medicine.js'; // ✅ Make sure this path is correct
 
 const router = express.Router();
 
-// ✅ GET: fetch all medicines
+// ✅ GET all medicines
 router.get('/', async (req, res) => {
     try {
         const medicines = await Medicine.find();
-        res.json(medicines);
+        res.status(200).json(medicines);
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching medicines:', error);
         res.status(500).json({ error: 'Failed to fetch medicines' });
     }
 });
 
-// ✅ POST: add a new medicine
+// ✅ POST new medicine
 router.post('/', async (req, res) => {
     try {
         const { name, manufacturer, stock, price, expiryDate } = req.body;
+
+        console.log('➡️ Received from frontend:', req.body); // ✅ DEBUG log
 
         const newMedicine = new Medicine({
             name,
@@ -30,14 +32,16 @@ router.post('/', async (req, res) => {
 
         const savedMedicine = await newMedicine.save();
 
-        // ✅ return saved object so frontend can update
-        res.status(201).json(savedMedicine);
+        console.log('✅ Saved to DB:', savedMedicine); // ✅ DEBUG log
+
+        res.status(201).json(savedMedicine); // ✅ send back to frontend
     } catch (error) {
-        console.error(error);
+        console.error('❌ Error saving medicine:', error);
         res.status(400).json({ error: 'Failed to save medicine' });
     }
 });
 
 export default router;
+
 
 
