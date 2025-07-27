@@ -5,6 +5,7 @@ const medicineSchema = new mongoose.Schema({
     manufacturer: String,
     stock: Number,
     expiryDate: Date,
+    price: Number,          
 });
 
 module.exports = mongoose.model('Medicine', medicineSchema);
